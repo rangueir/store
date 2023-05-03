@@ -1,0 +1,57 @@
+console.log('Store API')
+require('dotenv').config()
+require('express-async-errors')
+
+const express =require('express');
+const app = express();
+
+const connectDB = require('./db/connect')
+const productsRouter = require('./routes/products')
+
+const notFoundMiddleware = require('./middleware/not-found')
+const errorMiddleware = require('./middleware/error-handler')
+
+app.use(express.json())
+
+app.get('/', (req,res)=>{
+    res.send('<h1>Store API</h1><a href="/api/v1/products">products route</a>')
+})
+
+app.use('/api/v1/products', productsRouter)
+
+let template_table_header = {
+    "<>": "tr", "html": [
+        {"<>": "th", "html": "Name"},
+        {"<>": "th", "html": "Price %"},
+        {"<>": "th", "html": "Company %"},
+        {"<>": "th", "html": "Rating %"},
+        {"<>": "th", "html": "Featured %"},
+        
+    ]
+}
+
+let template_table_body = {
+    "<>": "tr", "html": [
+        {"<>": "td", "html": "${name}"},
+        {"<>": "td", "html": "${price}"},
+        {"<>": "td", "html": "${company}"},
+        {"<>": "td", "html": "${rating}"},
+        {"<>": "td", "html": "${featured}"},
+    ]
+}
+
+app.use(notFoundMiddleware)
+app.use(errorMiddleware)
+
+const port = process.env.PORT || 3000
+
+const start = async () =>{
+    try{
+        await connectDB(process.env.mongo_uri)
+        app.listen(port, console.log(`server is listening port ${port}...`))
+    }catch(error){
+        console.log(error)
+    }
+}
+
+start()
