@@ -19,27 +19,6 @@ app.get('/', (req,res)=>{
 
 app.use('/api/v1/products', productsRouter)
 
-let template_table_header = {
-    "<>": "tr", "html": [
-        {"<>": "th", "html": "Name"},
-        {"<>": "th", "html": "Price %"},
-        {"<>": "th", "html": "Company %"},
-        {"<>": "th", "html": "Rating %"},
-        {"<>": "th", "html": "Featured %"},
-        
-    ]
-}
-
-let template_table_body = {
-    "<>": "tr", "html": [
-        {"<>": "td", "html": "${name}"},
-        {"<>": "td", "html": "${price}"},
-        {"<>": "td", "html": "${company}"},
-        {"<>": "td", "html": "${rating}"},
-        {"<>": "td", "html": "${featured}"},
-    ]
-}
-
 app.use(notFoundMiddleware)
 app.use(errorMiddleware)
 
